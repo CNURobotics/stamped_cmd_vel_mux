@@ -28,15 +28,12 @@ namespace stamped_cmd_vel_mux {
 void StampedCmdVelPublishers::StampedCmdVelPubs::operator<<(const YAML::Node &node) {
   // Fill attributes with a YAML node content
 
-  std::cout << "   inside << " << std::endl;
-
   double new_timeout;
   std::string new_topic;
   int new_msg_type;
   node["name"] >> name;
   node["topic"] >> new_topic;
   node["msg_type"] >> new_msg_type;
-  std::cout << "   get short_desc " << std::endl;
 
 #ifdef HAVE_NEW_YAMLCPP
   if (node["short_desc"]) {
@@ -46,18 +43,15 @@ void StampedCmdVelPublishers::StampedCmdVelPubs::operator<<(const YAML::Node &no
     node["short_desc"] >> short_desc;
   }
 
-  std::cout << "   check shutdown ---" << std::endl;
   if (new_topic != topic  || new_msg_type != msg_type) {
     // Shutdown the topic if the name has changed so it gets recreated on
     // configuration reload
     // In the case of new publishers, topic is empty and shutdown has just no
     // effect
-      std::cout << "   updating topic info " << std::endl;
     topic = new_topic;
     msg_type = new_msg_type;
     pub.shutdown();
   }
-  std::cout << "   done << " << std::endl;
 
 }
 
@@ -67,24 +61,17 @@ void StampedCmdVelPublishers::configure(const YAML::Node &node) {
       throw EmptyCfgException("Configuration is empty");
     }
 
-    ROS_WARN("  Configuring StampedCmdVelPublishers with %ld Yaml nodes",node.size());
-
     std::vector<std::shared_ptr<StampedCmdVelPubs>> new_list(node.size());
     for (unsigned int i = 0; i < node.size(); i++) {
       // Parse entries on YAML
-      std::cout << "Yaml node " << i << " " << node[i] << std::endl;
 
       std::string new_pubs_name = node[i]["name"].Scalar();
-
-      std::cout << "   name <"<< new_pubs_name << ">" << std::endl;
 
       auto old_pubs = std::find_if(
           list.begin(), list.end(),
           [&new_pubs_name](const std::shared_ptr<StampedCmdVelPubs> &pubs) {
             return pubs->name == new_pubs_name;
           });
-
-      std::cout << " found old_pubs! = " << std::endl;
 
       if (old_pubs != list.end()) {
         // For names already in the subscribers list, retain current object so
@@ -94,10 +81,8 @@ void StampedCmdVelPublishers::configure(const YAML::Node &node) {
         new_list[i] = std::make_shared<StampedCmdVelPubs>(i);
       }
 
-      std::cout << " update the new list node" << std::endl;
       // update existing or new object with the new configuration
       *new_list[i] << node[i];
-      std::cout << "-----" << std::endl;
     }
 
     list = new_list;

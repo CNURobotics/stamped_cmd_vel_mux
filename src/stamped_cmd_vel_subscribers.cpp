@@ -27,7 +27,6 @@ namespace stamped_cmd_vel_mux {
 
 void StampedCmdVelSubscribers::StampedCmdVelSubs::operator<<(const YAML::Node &node) {
   // Fill attributes with a YAML node content
-  std::cout << "   inside << " << node <<  std::endl;
   double new_timeout;
   std::string new_topic;
   node["name"] >> name;

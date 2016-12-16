@@ -1,0 +1,9 @@
+<library path="lib/libstamped_cmd_vel_mux_nodelet">
+  <class name="stamped_cmd_vel_mux/StampedCmdVelMuxNodelet"
+         type="stamped_cmd_vel_mux::StampedCmdVelMuxNodelet"
+         base_class_type="nodelet::Nodelet">
+    <description>
+      Implementation for the (stamped) command velocity multiplexer as a nodelet.
+    </description>
+  </class>
+</library>

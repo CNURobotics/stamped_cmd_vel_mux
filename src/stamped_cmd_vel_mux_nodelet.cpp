@@ -29,6 +29,7 @@ namespace stamped_cmd_vel_mux {
 
 void StampedCmdVelMuxNodelet::cmdVelCallback(
     const geometry_msgs::Twist::ConstPtr &msg, unsigned int idx) {
+
   // Reset general timer
   common_timer.stop();
   common_timer.start();
@@ -149,10 +150,12 @@ void StampedCmdVelMuxNodelet::reloadConfiguration(
 
   std::unique_ptr<std::istream> is;
 
+
   // Configuration can come directly as a yaml-formatted string or as a file
   // path,
   // but not both, so we give priority to the first option
   if (config.yaml_cfg_data.size() > 0) {
+    ROS_INFO("  Using yaml_cfg_data (size=%ld)  ...",config.yaml_cfg_data.size());
     is.reset(new std::istringstream(config.yaml_cfg_data));
   } else {
     std::string yaml_cfg_file;
@@ -162,6 +165,8 @@ void StampedCmdVelMuxNodelet::reloadConfiguration(
     } else {
       yaml_cfg_file = config.yaml_cfg_file;
     }
+
+    ROS_INFO("  Loading yaml config data from file %s ...",yaml_cfg_file.c_str());
 
     is.reset(new std::ifstream(yaml_cfg_file.c_str(), std::ifstream::in));
     if (is->good() == false) {

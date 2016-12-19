@@ -101,7 +101,7 @@ void StampedCmdVelPublishers::publishTwist( const geometry_msgs::Twist::ConstPtr
     static geometry_msgs::TwistStamped ts;
 
     for (unsigned int i = 0; i < list.size(); i++) {
-      if (!list[i]->pub) {
+      if (list[i]->pub) {
 
           // Choose the topic type that we are subscribing to
           if (list[i]->msg_type)
@@ -121,7 +121,7 @@ void StampedCmdVelPublishers::publishTwist( const geometry_msgs::Twist::ConstPtr
 void StampedCmdVelPublishers::publishTwistStamped( const geometry_msgs::TwistStamped::ConstPtr& msg)
 {
     for (unsigned int i = 0; i < list.size(); i++) {
-      if (!list[i]->pub) {
+      if (list[i]->pub) {
 
           // Choose the topic type that we are subscribing to
           if (list[i]->msg_type)
